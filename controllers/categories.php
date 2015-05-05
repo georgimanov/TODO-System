@@ -1,26 +1,23 @@
-<?php
+z<?php
 
 namespace Controllers;
 
 class Categories_Controller extends Master_Controller {
 
     protected $message;
+    protected $auth;
 
     public function __construct() {
         parent::__construct(get_class(),
             'category', '/views/categories/');
 
         $this->message = "";
+        $auth = \Lib\Auth::get_instance();
+        $auth->authorize_admin();
     }
 
     public function index()
     {
-        $auth = \Lib\Auth::get_instance();
-        if( !  $auth->is_admin() ) {
-            header("Location: ". DX_URL. "todos/index");
-            exit;
-        }
-
         $categories = $this->model->find();
 
         if( empty( $categories ) ){
@@ -37,15 +34,6 @@ class Categories_Controller extends Master_Controller {
 
     public function add()
     {
-        $auth = \Lib\Auth::get_instance();
-
-        $error_messages = array();
-
-        if( !  $auth->is_admin() ) {
-            header("Location: ". DX_URL. "posts/index");
-            exit;
-        }
-
         if( ! empty( $_POST['name'] ) ) {
             $name = $_POST['name'];
 
@@ -71,15 +59,6 @@ class Categories_Controller extends Master_Controller {
 
     public function edit($id)
     {
-        $auth = \Lib\Auth::get_instance();
-
-        $error_messages = array();
-
-        if( !  $auth->is_admin() ) {
-            header("Location: ". DX_URL. "posts/index");
-            exit;
-        }
-
         $element = $this->model->get($id);
         $element = $element[0];
 
@@ -116,13 +95,6 @@ class Categories_Controller extends Master_Controller {
 
     public function delete($id)
     {
-        $auth = \Lib\Auth::get_instance();
-
-        if( !  $auth->is_admin() ) {
-            header("Location: ". DX_URL. "posts/index");
-            exit;
-        }
-
         $element = $this->model->get($id);
 
         if( empty( $element ) ){

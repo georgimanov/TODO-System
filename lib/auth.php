@@ -81,5 +81,9 @@ class Auth {
 		return false;
 	}
 
-
+    public function authorize_admin (){
+        if ( ! $this->is_admin() ) {
+            header("Location: " . DX_URL);
+        }
+    }
 }
